@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Diseño con Múltiples Campos</title>
+    
+    <!-- GOOGLE FONTS: NUNITO CON TODOS SUS PESOS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        .contenedor {
+            width: 360px;
+            height: 820px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .fondo-uno { background-image: url('fondo1.jpg'); }
+        .fondo-dos { background-image: url('fondo2.jpg'); margin-top: 10px; }
+
+        /* --- ESTILO BASE PARA TODOS LOS CUADROS --- */
+        .caja-fija {
+            position: absolute;
+            border: 2px solid transparent;
+            border-radius: 11px;
+            outline: none;
+            width: 320px;
+            height: 48px;
+            left: 20.4px; 
+            display: flex;
+            align-items: center;
+            transition: border-color 0.2s ease;
+        }
+
+        .caja-fija:focus-within {
+            border-color: #de437e;
+        }
+
+        /* --- POSICIONES FORMULARIO (FONDO 1) --- */
+        .pos-1 { top: 220px; }
+        .pos-2 { top: 375px; }
+        .pos-3 { top: 453px; }
+        .pos-4 { top: 531px; }
+        .pos-5 { top: 297px; }
+
+        /* --- BOTÓN PROCESAR DENTRO DEL CONTENEDOR --- */
+        .btn-copiar {
+            position: absolute;
+            bottom: 184px; /* Distancia desde el borde inferior del primer fondo */
+            left: 36%;
+            transform: translateX(-50%);
+            padding: 18px 38px;
+            
+            background-color: transparent;
+            border: none;
+            
+            font-family: "Nunito", sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        /* --- CAPAS DE TEXTO PARA EL SEGUNDO CONTENEDOR (FONDO 2) --- */
+        .salida-texto {
+            position: absolute;
+            width: 320px;
+            left: 20.4px;
+            color: #ffffff;
+            font-family: "Nunito", sans-serif;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 0.1px;
+            pointer-events: none;
+            
+            /* HABILITA EL SALTO DE LÍNEA MULTILÍNEA */
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.25;
+        }
+
+        .res-doc { top: 365px; left:261px; }
+        
+        .res-banco { 
+            top: 458px; left:63px;
+            max-width: 265px; 
+            height: auto; 
+            letter-spacing: 0.1px;
+            text-align: right;
+        }
+
+        .res-tel { top: 427px; left: 235px; }
+        .res-monto { top: 255.5px; left: 26px; font-weight: 600 ; width: 308px; text-align: center; font-size: 16.1px; }
+        
+        /* CONTENEDOR DEL CONCEPTO ADAPTADO PARA EMPUJAR LA PALABRA A LA IZQUIERDA */
+        .res-concepto { 
+            top: 500px; 
+            left: 32px;  
+            width: 296px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* ESTILO ESPECÍFICO PARA LA PALABRA ADICIONAL */
+        .palabra-extra-estilo {
+            font-size: 14px;
+            text-align: left;
+            margin-right: 8px;
+            font-weight: 600;
+            letter-spacing: 0px;
+        }
+
+        .texto-concepto-user {
+            text-align: right;
+            flex-grow: 1;
+            font-weight: 300;
+        }
+
+        .res-fecha {
+            top: 303px;
+            left: 253px;
+            font-weight: 300;
+        }
+
+        /* --- PRIMERA APARICIÓN DE LA HORA --- */
+        .res-hora {
+            top: 10px; /* Ajusta la posición vertical según tu imagen */
+            left: 20px; /* Ajusta la posición horizontal según tu imagen */
+            font-weight: 300;
+            font-size: 13px;
+            font-family: Arial, Helvetica, sans-serif
+            
+        }
+
+        /* --- SEGUNDA APARICIÓN DE LA HORA --- */
+        .res-hora-2 {
+            top: 10px; /* Ajusta la posición vertical según tu imagen */
+            left: 20px; /* Ajusta la posición horizontal según tu imagen */
+            font-weight: 300;
+            font-size: 13px;
+            font-family: Arial, Helvetica, sans-serif
+            
+        }
+
+        /* --- INPUTS Y SELECTS --- */
+        input[type="text"], input[type="tel"], select {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            outline: none;
+            
+            font-family: "Nunito", sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            color: #efefef; 
+            text-align: left;
+            caret-color: #de437e;
+
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        input::placeholder {
+            color: #8F8F8F;
+            opacity: 1;
+            font-family: "Nunito", sans-serif;
+            font-weight: 300;
+        }
+
+        select option {
+            background-color: #1a1a1a;
+            color: #efefef;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PRIMER CONTENEDOR -->
+    <div class="contenedor fondo-uno" onclick="activarFullScreen()">
+        <div class="caja-fija pos-1">
+            <input type="tel" id="input-doc" placeholder="Documento:" onclick="event.stopPropagation()" oninput="validarInput(this, 'numeros')">
+        </div>
+
+        <div class="caja-fija pos-5">
+            <select id="select-banco" onclick="event.stopPropagation()">
+                <option>0102 - BANCO DE VENEZUELA</option>
+                <option>0156 - 100% BANCO</option>
+                <option>0172 - BANCAMIGA BANCO UNIVERSAL, C.A.</option>
+                <option>0114 - BANCARIBE</option>
+                <option>0171 - BANCO ACTIVO</option>
+                <option>0128 - BANCO CORONÍ</option>
+                <option>0175 - BANCO DIGITAL DE LOS TRABAJADORES, BANCO UNIVERSAL</option>
+                <option>0115 - BANCO EXTERIOR</option>
+                <option>0151 - BANCO FONDO COMÚN</option>
+                <option>0105 - BANCO MERCANTIL</option>
+                <option>0191 - BANCO NACIONAL DE CREDITO</option>
+                <option>0138 - BANCO PLAZA</option>
+                <option>0137 - BANCO SOFITASA</option>
+                <option>0104 - BANCO VENEZOLANO DE CREDITO</option>
+                <option>0168 - BANCRECER</option>
+                <option>0134 - BANESCO</option>
+                <option>0177 - BANFANB</option>
+                <option>0146 - BANGENTE</option>
+                <option>0174 - BANPLUS</option>
+                <option>0108 - BBVA PROVINCIAL</option>
+            </select>
+        </div>
+
+        <div class="caja-fija pos-2">
+            <input type="tel" id="input-tel" placeholder="Teléfono:" onclick="event.stopPropagation()" oninput="validarInput(this, 'numeros')">
+        </div>
+
+        <div class="caja-fija pos-3">
+            <input type="tel" id="input-monto" placeholder="Monto:" 
+                   onclick="event.stopPropagation()" 
+                   onfocus="iniciarMonto(this)" 
+                   onblur="finalizarMonto(this)" 
+                   oninput="formatearMonto(this)">
+        </div>
+
+        <div class="caja-fija pos-4">
+            <input type="text" id="input-concepto" placeholder="Concepto:" onclick="event.stopPropagation()" oninput="validarInput(this, 'letras')">
+        </div>
+
+        <!-- BOTÓN DENTRO DEL PRIMER CONTENEDOR -->
+        <button class="btn-copiar" onclick="copiarDatos(event)"> </button>
+        <div id="res-hora" class="salida-texto res-hora"></div>
+    </div>
+
+    <!-- SEGUNDO CONTENEDOR -->
+    <div class="contenedor fondo-dos" onclick="activarFullScreen()">
+        <div id="res-doc" class="salida-texto res-doc"></div>
+        <div id="res-banco" class="salida-texto res-banco"></div>
+        <div id="res-tel" class="salida-texto res-tel"></div>
+        <div id="res-monto" class="salida-texto res-monto"></div>
+        <div id="res-concepto" class="salida-texto res-concepto"></div>
+        <div id="res-fecha" class="salida-texto res-fecha"></div>
+        
+        <!-- PRIMER Y SEGUNDO CAMPO PARA LA HORA -->
+        
+        <div id="res-hora-2" class="salida-texto res-hora-2"></div>
+    </div>
+
+    <script>
+        function validarInput(input, tipo) {
+            if (tipo === 'numeros') {
+                input.value = input.value.replace(/[^0-9]/g, '');
+            } else if (tipo === 'letras') {
+                input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+            }
+        }
+
+        function iniciarMonto(input) {
+            input.style.textAlign = 'right';
+            if (input.value.trim() === '') {
+                input.value = '0,00 Bs';
+            }
+        }
+
+        function finalizarMonto(input) {
+            if (input.value === '' || input.value === '0,00 Bs') {
+                input.value = '';
+                input.style.textAlign = 'left';
+            }
+        }
+
+        function formatearMonto(input) {
+            let digitos = input.value.replace(/\D/g, '');
+            if (digitos === '') {
+                input.value = '0,00 Bs';
+                return;
+            }
+            let valor = (parseInt(digitos, 10) / 100).toFixed(2);
+            let partes = valor.split('.');
+            let entero = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            input.value = entero + ',' + partes[1] + ' Bs';
+        }
+
+        function copiarDatos(e) {
+            if(e) e.stopPropagation();
+
+            actualizarFechaYHora();
+
+            document.getElementById('res-doc').innerText = document.getElementById('input-doc').value;
+            
+            const elemBanco = document.getElementById('res-banco');
+            const elemConcepto = document.getElementById('res-concepto');
+            
+            elemBanco.innerText = document.getElementById('select-banco').value;
+            document.getElementById('res-tel').innerText = document.getElementById('input-tel').value;
+            document.getElementById('res-monto').innerText = document.getElementById('input-monto').value;
+            
+            const palabraTexto = "Concepto:";
+            const valConcepto = document.getElementById('input-concepto').value.trim();
+
+            if (valConcepto !== '') {
+                elemConcepto.innerHTML = `<span class="palabra-extra-estilo">${palabraTexto}</span><span class="texto-concepto-user">${valConcepto}</span>`;
+            } else {
+                elemConcepto.innerHTML = '';
+            }
+
+            const topBancoBase = 440; 
+            const separacionDeseada = 47; 
+            const alturaBanco = elemBanco.offsetHeight;
+            
+            const topConcepto1 = topBancoBase + alturaBanco + (separacionDeseada - 16);
+            elemConcepto.style.top = topConcepto1 + 'px';
+
+            document.querySelector('.fondo-dos').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function activarFullScreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            }
+            setTimeout(() => { window.scrollTo(0, 1); }, 100);
+        }
+
+        function obtenerFechaActual() {
+            const hoy = new Date();
+            const dia = String(hoy.getDate()).padStart(2, '0');
+            const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+            const ano = hoy.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        function obtenerHoraActual() {
+            const hoy = new Date();
+            let horas = hoy.getHours();
+            const minutos = String(hoy.getMinutes()).padStart(2, '0');
+            const ampm = horas >= 12 ? 'PM' : 'AM';
+            horas = horas % 12 || 12;
+            const horasStr = String(horas).padStart(2, '0');
+            return `${horasStr}:${minutos} ${ampm}`;
+        }
+
+        function actualizarFechaYHora() {
+            const elemFecha = document.getElementById('res-fecha');
+            const elemHora1 = document.getElementById('res-hora');
+            const elemHora2 = document.getElementById('res-hora-2');
+            
+            const horaActual = obtenerHoraActual();
+
+            if (elemFecha) {
+                elemFecha.innerText = obtenerFechaActual();
+            }
+            if (elemHora1) {
+                elemHora1.innerText = horaActual;
+            }
+            if (elemHora2) {
+                elemHora2.innerText = horaActual;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', actualizarFechaYHora);
+    </script>
+
+</body>
+</html>
